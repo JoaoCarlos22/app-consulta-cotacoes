@@ -1,8 +1,8 @@
 import 'package:intl/intl.dart';
 
 class Quotes {
-  final String lastTimeUpdate;
-  final String nextTimeUpdate;
+  final DateTime lastTimeUpdate;
+  final DateTime nextTimeUpdate;
   final String baseQuote;
   final Map<String, double> quotasData;
 
@@ -16,12 +16,6 @@ class Quotes {
     final DateTime dateTimeNextUpdade = apiDateFormat.parse(json['time_next_update_utc'] as String);
     final DateTime dateTimeLastUpdate = apiDateFormat.parse(json['time_last_update_utc'] as String);
 
-    // Formate as datas para exibição
-    String formattedLastTimeUpdate = DateFormat('dd \'de\' MMMM \'de\' yyyy - HH:mm', 'pt_BR')
-        .format(dateTimeLastUpdate.toLocal()) ;
-    String formattedNextTimeUpdate = DateFormat('dd \'de\' MMMM \'de\' yyyy - HH:mm', 'pt_BR')
-        .format(dateTimeNextUpdade.toLocal());
-
     // formatacao das cotações e seus valores
     Map<String, double> conversionRates = {};
     if (json['conversion_rates'] != null) {
@@ -32,8 +26,8 @@ class Quotes {
 
     // retorna o objeto com os valores formatados
     return Quotes(
-        lastTimeUpdate: formattedLastTimeUpdate,
-        nextTimeUpdate: formattedNextTimeUpdate,
+        lastTimeUpdate: dateTimeLastUpdate,
+        nextTimeUpdate: dateTimeNextUpdade,
         baseQuote: json['base_code'] as String,
         quotasData: conversionRates);
   }
