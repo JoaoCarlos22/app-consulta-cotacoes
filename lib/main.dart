@@ -51,7 +51,7 @@ class Home extends StatefulWidget {
   const Home({super.key});
 
   @override
-  State<StatefulWidget> createState() => QuotesScreen();
+  State<Home> createState() => QuotesScreen();
 }
 
 class QuotesScreen extends State<Home> {
@@ -65,6 +65,9 @@ class QuotesScreen extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final QuotesProvider quotesProvider =
+    Provider.of<QuotesProvider>(context);
+    final Quotes? currentQuotes = quotesProvider.quotesData;
     return MaterialApp(
       title: 'App de Cotações Financeiras',
       theme: ThemeData(
@@ -76,18 +79,21 @@ class QuotesScreen extends State<Home> {
           child: FutureBuilder<void>(
             future: _quotesFuture,
             builder: (context, snapshot) {
-              if (snapshot.hasError) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                if (currentQuotes == null) {
+                  return const CircularProgressIndicator();
+                }
+              } else if (snapshot.hasError) {
                 return Text('Erro ao mostrar os dados: ${snapshot.error}');
-              } else if (snapshot.hasData) {
-                final QuotesProvider quotesProvider =
-                    Provider.of<QuotesProvider>(context);
-                final Quotes? currentQuotes = quotesProvider.quotesData;
-                if (currentQuotes != null) {
-                  return Column(
-                    children: [
-                      Text('Cotação base: ${currentQuotes.baseQuote}'),
-                      const SizedBox(height: 20),
-                      Expanded(
+              } else {
+                if (currentQuotes == null) {
+                  return const Text('Nenhum dado de cotação disponível após o fetch.');
+                }
+                return Column(
+                  children: [
+                    Text('Cotação base: ${currentQuotes.baseQuote}'),
+                    const SizedBox(height: 20),
+                    Expanded(
                         child: ListView.builder(
                           itemCount: currentQuotes.quotasData.length,
                           itemBuilder: (context, index) {
@@ -140,12 +146,10 @@ class QuotesScreen extends State<Home> {
                           },
                         ),
                       ),
-                    ],
-                  );
-                }
-                return const Text('Dados de cotação não disponíveis.');
+                  ],
+                );
               }
-              return const Center(child: CircularProgressIndicator());
+              return const SizedBox.shrink();
             },
           ),
         ),
