@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import './Quotes.dart';
-import 'QuotesProvider.dart';
+import '../models/Quotes.dart';
+import '../providers/QuotesProvider.dart';
 
 class Details extends StatelessWidget {
 

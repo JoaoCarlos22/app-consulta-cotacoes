@@ -3,16 +3,17 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'dart:convert';
-import './Quotes.dart';
-import './QuotesProvider.dart';
-import './Details.dart';
+import 'models/Quotes.dart';
+import './repositories/quotes_repository.dart';
+import 'providers/QuotesProvider.dart';
+import 'screen/Details.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(
     ChangeNotifierProvider(
-      create: (context) => QuotesProvider(),
+      create: (context) => QuotesProvider(QuotesRepository()),
       child: const MyApp(),
     ),
   );
@@ -41,22 +42,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-Future<void> fetchQuotes(BuildContext context) async {
-  try {
-    final response = await http.get(
-      Uri.parse(
-        'https://v6.exchangerate-api.com/v6/c484663a1f90675078cd7ba5/latest/USD',
-      ),
-    );
-    //debugPrint('API Response Body: ${response.body}');
-    final Map<String, dynamic> jsonMap = jsonDecode(response.body);
-    final Quotes quotes = Quotes.fromJson(jsonMap);
 
-    Provider.of<QuotesProvider>(context, listen: false).setQuotes(quotes);
-  } catch (e) {
-    throw Exception('Falha ao carregar as cotas financeiras! - $e');
-  }
-}
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -71,12 +57,17 @@ class QuotesScreen extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _quotesFuture = fetchQuotes(context);
+    _quotesFuture = loadInitialQuotes();
+  }
+
+  Future<void> loadInitialQuotes() async {
+    final quotesProvider = Provider.of<QuotesProvider>(context, listen: false);
+    await quotesProvider.setQuotes();
   }
 
   Future<void> refresh() async {
     setState(() {
-      _quotesFuture = fetchQuotes(context);
+      _quotesFuture = loadInitialQuotes();
     });
 
     await _quotesFuture;
