@@ -1,16 +1,85 @@
-# app_consulta_cotacoes
+# 📈 Aplicativo Mobile de Consulta de Cotações Financeiras
 
-A new Flutter project.
+Este é um aplicativo Flutter que exibe cotações financeiras atualizadas, permitindo ao usuário visualizar uma moeda base e a 
+lista de outras moedas com suas respectivas taxas de câmbio em tempo real.
 
-## Getting Started
+- **API Utilizada:**  [ExchangeRate-API](https://www.exchangerate-api.com/)
 
-This project is a starting point for a Flutter application.
+## 🚀 Tecnologias Utilizadas
 
-A few resources to get you started if this is your first Flutter project:
+- **Flutter**: Framework para desenvolvimento mobile multi-plataforma.
+- **Dart**: Linguagem de programação.
+- **http**: Pacote para realizar requisições HTTP à API.
+- **provider**: Gerenciamento de estado para disponibilizar os dados das cotações em toda a aplicação.
+- **intl**: Pacote para internacionalização e formatação de datas e números.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 📁 Estrutura do Projeto
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+O projeto segue uma estrutura de pastas modular, focando na separação de preocupações para facilitar a manutenção e escalabilidade:
+
+```
+lib/
+| -- main.dart
+| -- models/
+|      |-- Quotes.dart
+|
+| -- providers/
+|      |-- QuotesProvider.dart
+|
+| -- repositories/
+|      |-- quotesRepository.dart
+|
+| -- screen/
+       |-- Details.dart
+test/
+| -- quotesParsingTest.dart
+```
+
+## 🛠️ Como Iniciar o Projeto
+
+Siga estas instruções para configurar e rodar o projeto em sua máquina local:
+
+**Pré-requisitos**
+
+- Flutter SDK instalado.
+- Um editor de código (VS Code, Android Studio).
+- Um emulador Android/iOS configurado ou um dispositivo físico.
+
+**Instalação**
+
+**1. Clone o repositório:**
+
+```
+git clone https://github.com/JoaoCarlos22/app-consulta-cotacoes.git
+cd app_consulta_cotacoes
+```
+
+**2. Instale as dependências:**
+
+```
+flutter pub get
+```
+
+**3. Verifique as permissões de internet (Android):**
+
+Certifique-se de que no arquivo android/app/src/main/AndroidManifest.xml, a seguinte linha esteja presente dentro da tag <manifest>:
+
+```
+<uses-permission android:name="android.permission.INTERNET"/>
+```
+
+**4. Rode o aplicativo:**
+
+Após a instalação das dependências, você pode rodar o aplicativo:
+
+```
+flutter run
+```
+
+**5. Rode os testes**
+
+Os testes unitários verificam a lógica de processamento dos dados da API de forma isolada.
+
+```
+flutter test test/quotesParsingTest.dart
+```
