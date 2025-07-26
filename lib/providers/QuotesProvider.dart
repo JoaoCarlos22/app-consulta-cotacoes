@@ -5,6 +5,7 @@ import '../repositories/quotes_repository.dart';
 class QuotesProvider extends ChangeNotifier {
   final QuotesRepository _quotesRepository;
   Quotes? _quotesData;
+
   Quotes? get quotesData => _quotesData;
 
   QuotesProvider(this._quotesRepository);
@@ -14,6 +15,5 @@ class QuotesProvider extends ChangeNotifier {
     final Quotes fetchedQuotes = await _quotesRepository.fetchQuotes();
     _quotesData = fetchedQuotes;
     notifyListeners();
-
   }
 }

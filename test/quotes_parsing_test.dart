@@ -19,10 +19,15 @@ void main() {
 
     final quotes = Quotes.fromJson(mockValidation);
     test('Validação da formatação de data e hora', () {
-
-      final DateFormat apiDateFormat = DateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
-      final DateTime dateTimeNextUpdade = apiDateFormat.parse("Fri, 25 Jul 2025 00:00:01 +0000");
-      final DateTime dateTimeLastUpdate = apiDateFormat.parse("Thu, 24 Jul 2025 00:00:01 +0000");
+      final DateFormat apiDateFormat = DateFormat(
+        "EEE, dd MMM yyyy HH:mm:ss Z",
+      );
+      final DateTime dateTimeNextUpdade = apiDateFormat.parse(
+        "Fri, 25 Jul 2025 00:00:01 +0000",
+      );
+      final DateTime dateTimeLastUpdate = apiDateFormat.parse(
+        "Thu, 24 Jul 2025 00:00:01 +0000",
+      );
 
       expect(quotes.nextTimeUpdate, dateTimeNextUpdade);
       expect(quotes.lastTimeUpdate, dateTimeLastUpdate);

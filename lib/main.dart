@@ -36,14 +36,10 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('pt', 'BR'),
-      ],
+      supportedLocales: const [Locale('pt', 'BR')],
     );
   }
 }
-
-
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -76,8 +72,7 @@ class QuotesScreen extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final QuotesProvider quotesProvider =
-    Provider.of<QuotesProvider>(context);
+    final QuotesProvider quotesProvider = Provider.of<QuotesProvider>(context);
     final Quotes? currentQuotes = quotesProvider.quotesData;
     return MaterialApp(
       title: 'App de Cotações Financeiras',
@@ -85,62 +80,70 @@ class QuotesScreen extends State<Home> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
       ),
       home: Scaffold(
-        appBar: AppBar(title: Text('App de Cotações Financeiras'),
-        centerTitle: true,
+        appBar: AppBar(
+          title: Text('App de Cotações Financeiras'),
+          centerTitle: true,
           elevation: 50.0,
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        backgroundColor: Colors.blueAccent,
-        foregroundColor: Colors.white,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+          backgroundColor: Colors.blueAccent,
+          foregroundColor: Colors.white,
         ),
         body: RefreshIndicator(
           onRefresh: refresh,
-          child:  Center(
-          child: FutureBuilder<void>(
-            future: _quotesFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                if (currentQuotes == null) {
-                  return const CircularProgressIndicator();
-                }
-              } else if (snapshot.hasError) {
-                return Text('Erro ao mostrar os dados: ${snapshot.error}');
-              } else {
-                if (currentQuotes == null) {
-                  return const Text('Nenhum dado de cotação disponível após o fetch.');
-                }
-                return Column(
-                  children: [
-                    cardBaseQuote(context, currentQuotes),
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 2.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Sigla',
-                            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey[700],
+          child: Center(
+            child: FutureBuilder<void>(
+              future: _quotesFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  if (currentQuotes == null) {
+                    return const CircularProgressIndicator();
+                  }
+                } else if (snapshot.hasError) {
+                  return Text('Erro ao mostrar os dados: ${snapshot.error}');
+                } else {
+                  if (currentQuotes == null) {
+                    return const Text(
+                      'Nenhum dado de cotação disponível após o fetch.',
+                    );
+                  }
+                  return Column(
+                    children: [
+                      cardBaseQuote(context, currentQuotes),
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 32.0,
+                          vertical: 2.0,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Sigla',
+                              style: Theme.of(context).textTheme.labelLarge
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey[700],
+                                  ),
                             ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              'Valor',
-                              textAlign: TextAlign.right,
-                              style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[700],
+                            Expanded(
+                              child: Text(
+                                'Valor',
+                                textAlign: TextAlign.right,
+                                style: Theme.of(context).textTheme.labelLarge
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey[700],
+                                    ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    //Divider(color: Colors.grey[300]),
-                    const SizedBox(height: 4.0),
-                    Expanded(
-                      child: ListView.builder(
+                      //Divider(color: Colors.grey[300]),
+                      const SizedBox(height: 4.0),
+                      Expanded(
+                        child: ListView.builder(
                           itemCount: currentQuotes.quotasData.length,
                           itemBuilder: (context, index) {
                             String? key = currentQuotes.quotasData.keys
@@ -151,14 +154,14 @@ class QuotesScreen extends State<Home> {
                           },
                         ),
                       ),
-                  ],
-                );
-              }
-              return const SizedBox.shrink();
-            },
+                    ],
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
           ),
         ),
-      ),
       ),
     );
   }
@@ -175,30 +178,32 @@ Widget cardBaseQuote(BuildContext context, Quotes currentQuotes) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-              'Cotação Base',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Colors.grey[600],
-                fontWeight: FontWeight.w500,)),
+            'Cotação Base',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: Colors.grey[600],
+              fontWeight: FontWeight.w500,
+            ),
+          ),
           const SizedBox(height: 8.0),
           Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              currentQuotes.baseQuote,
-              style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                currentQuotes.baseQuote,
+                style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
-            ),
-            Icon(
-              Icons.attach_money,
-              color: Theme.of(context).primaryColor.withOpacity(0.7),
-              size: 32,
-            ),
-          ],
+              Icon(
+                Icons.attach_money,
+                color: Theme.of(context).primaryColor.withOpacity(0.7),
+                size: 32,
+              ),
+            ],
           ),
-        ]
+        ],
       ),
     ),
   );
@@ -215,43 +220,30 @@ Widget cardQuoteList(BuildContext context, String? key, double? value) {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  Details(
-                    keyQuote: key,
-                    valueQuote: value,
-                  ),
+              builder: (context) => Details(keyQuote: key, valueQuote: value),
             ),
           );
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
           child: Row(
-            mainAxisAlignment:
-            MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(key,
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(
+              Text(
+                key,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: Theme
-                      .of(context)
-                      .primaryColor,
-                ),),
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
               const SizedBox(width: 16),
               Expanded(
                 child: Text(
                   value.toStringAsFixed(2),
                   textAlign: TextAlign.right,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headlineSmall
-                      ?.copyWith(
-                    color: Colors.grey[800],
-                    ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.headlineSmall?.copyWith(color: Colors.grey[800]),
                 ),
               ),
             ],
