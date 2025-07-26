@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'models/Quotes.dart';
-import './repositories/quotes_repository.dart';
+import './repositories/quotesRepository.dart';
 import 'providers/QuotesProvider.dart';
 import 'screen/Details.dart';
 
