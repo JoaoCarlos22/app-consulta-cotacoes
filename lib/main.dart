@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -81,11 +82,19 @@ class QuotesScreen extends State<Home> {
     return MaterialApp(
       title: 'App de Cotações Financeiras',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
       ),
       home: Scaffold(
-        appBar: AppBar(title: Text('App de Cotações Financeiras')),
-        body: Center(
+        appBar: AppBar(title: Text('App de Cotações Financeiras'),
+        centerTitle: true,
+          elevation: 50.0,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        backgroundColor: Colors.blueAccent,
+        foregroundColor: Colors.white,
+        ),
+        body: RefreshIndicator(
+          onRefresh: refresh,
+          child:  Center(
           child: FutureBuilder<void>(
             future: _quotesFuture,
             builder: (context, snapshot) {
@@ -101,64 +110,47 @@ class QuotesScreen extends State<Home> {
                 }
                 return Column(
                   children: [
-                    Text('Cotação base: ${currentQuotes.baseQuote}'),
+                    cardBaseQuote(context, currentQuotes),
                     const SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 2.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Sigla',
+                            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Valor',
+                              textAlign: TextAlign.right,
+                              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    //Divider(color: Colors.grey[300]),
+                    const SizedBox(height: 4.0),
                     Expanded(
-                        child: RefreshIndicator(
-                      onRefresh: refresh,
-                        child: ListView.builder(
+                      child: ListView.builder(
                           itemCount: currentQuotes.quotasData.length,
                           itemBuilder: (context, index) {
                             String? key = currentQuotes.quotasData.keys
                                 .elementAt(index);
                             double? value = currentQuotes.quotasData.values
                                 .elementAt(index);
-                            return Container(
-                              height: 50,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Color.from(
-                                    alpha: 75,
-                                    red: 161,
-                                    green: 161,
-                                    blue: 161,
-                                  ),
-                                  width: 0.8,
-                                ),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              //width: 50,
-                              //color:Colors.amber,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text('$key'),
-                                  Text('${value.toStringAsFixed(2)}'),
-                                  ElevatedButton(
-                                    child: Text('Ver'),
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => Details(
-                                            keyQuote: key,
-                                            valueQuote: value,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            );
-                            // return ListTile(
-                            //   title: Text( : ${value.toStringAsFixed(4)}'),
-                            // );
+                            return cardQuoteList(context, key, value);
                           },
                         ),
                       ),
-                    ),
                   ],
                 );
               }
@@ -167,6 +159,106 @@ class QuotesScreen extends State<Home> {
           ),
         ),
       ),
+      ),
     );
   }
+}
+
+Widget cardBaseQuote(BuildContext context, Quotes currentQuotes) {
+  return Card(
+    margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+    elevation: 4.0,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+    child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+              'Cotação Base',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Colors.grey[600],
+                fontWeight: FontWeight.w500,)),
+          const SizedBox(height: 8.0),
+          Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              currentQuotes.baseQuote,
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            Icon(
+              Icons.attach_money,
+              color: Theme.of(context).primaryColor.withOpacity(0.7),
+              size: 32,
+            ),
+          ],
+          ),
+        ]
+      ),
+    ),
+  );
+}
+
+Widget cardQuoteList(BuildContext context, String? key, double? value) {
+  if (key != null && value != null) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+      elevation: 2.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  Details(
+                    keyQuote: key,
+                    valueQuote: value,
+                  ),
+            ),
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+          child: Row(
+            mainAxisAlignment:
+            MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(key,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Theme
+                      .of(context)
+                      .primaryColor,
+                ),),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  value.toStringAsFixed(2),
+                  textAlign: TextAlign.right,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headlineSmall
+                      ?.copyWith(
+                    color: Colors.grey[800],
+                    ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  return const Text('Erro ao mostrar as cotações!');
 }
