@@ -63,6 +63,14 @@ class QuotesScreen extends State<Home> {
     _quotesFuture = fetchQuotes(context);
   }
 
+  Future<void> refresh() async {
+    setState(() {
+      _quotesFuture = fetchQuotes(context);
+    });
+
+    await _quotesFuture;
+  }
+
   @override
   Widget build(BuildContext context) {
     final QuotesProvider quotesProvider =
@@ -94,6 +102,8 @@ class QuotesScreen extends State<Home> {
                     Text('Cotação base: ${currentQuotes.baseQuote}'),
                     const SizedBox(height: 20),
                     Expanded(
+                        child: RefreshIndicator(
+                      onRefresh: refresh,
                         child: ListView.builder(
                           itemCount: currentQuotes.quotasData.length,
                           itemBuilder: (context, index) {
@@ -146,6 +156,7 @@ class QuotesScreen extends State<Home> {
                           },
                         ),
                       ),
+                    ),
                   ],
                 );
               }
