@@ -2,8 +2,8 @@ import 'package:app_consulta_cotacoes/screen/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import './repositories/quotesRepository.dart';
-import 'providers/QuotesProvider.dart';
+import 'repositories/quotes_repository.dart';
+import 'providers/quotes_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

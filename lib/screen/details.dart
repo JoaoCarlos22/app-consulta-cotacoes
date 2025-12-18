@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../models/quotes.dart';
-import '../providers/QuotesProvider.dart';
+import '../providers/quotes_provider.dart';
 
 class Details extends StatelessWidget {
   final String keyQuote;

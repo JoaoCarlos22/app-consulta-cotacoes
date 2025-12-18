@@ -1,7 +1,7 @@
 import 'package:app_consulta_cotacoes/components/card_base_quote.dart';
 import 'package:app_consulta_cotacoes/components/card_quote_list.dart';
 import 'package:app_consulta_cotacoes/models/quotes.dart';
-import 'package:app_consulta_cotacoes/providers/QuotesProvider.dart';
+import 'package:app_consulta_cotacoes/providers/quotes_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
