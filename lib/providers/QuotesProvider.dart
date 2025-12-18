@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import '../models/Quotes.dart';
+import '../models/quotes.dart';
 import '../repositories/quotesRepository.dart';
 
 class QuotesProvider extends ChangeNotifier {
